@@ -99,7 +99,7 @@ function App() {
           </li>
           <li>
             <label htmlFor="term" className={"error " + fieldsValidation[2]}>Error message</label>
-            <label htmlFor="term" className="heading">Loan Duration: </label>
+            <label htmlFor="term" className="heading">Loan Duration </label>
             <input type="tel" name="term" id="term" defaultValue={term} onChange={(ev)=> {
               if (validateIsWholeNumber(ev.target.value, 2)) {
                 setTerm(Number(ev.target.value));
@@ -145,7 +145,7 @@ function App() {
           </li>
           <li>
             <label htmlFor="rate" className={"error " + fieldsValidation[1]}>Error message</label>
-            <label htmlFor="rate" className="heading">Interest rate: </label>
+            <label htmlFor="rate" className="heading">Interest rate </label>
             <input type="tel" name="rate" id="rate" defaultValue={rate} onChange={(ev)=> {
               if (validateIsPercentage(ev.target.value, 1)) {
                 setRate(Number(ev.target.value));
@@ -168,7 +168,7 @@ function App() {
         </div>
         <div className="affordabilitySlider">
           <Slider
-            min={0}
+            min={25}
             max={50}
             value={dti}
             className="custom-slider"
@@ -187,13 +187,13 @@ function App() {
 
           <ul>
             <li>
-              <b>0-36%: Affordable</b>
+              <b>0-36%:</b> Affordable
             </li>
             <li>
-              <b>37-42%: Stretching</b>
+              <b>37-42%:</b> Stretching
             </li>
             <li>
-              <b>43% or higher: Aggressive</b>
+              <b>43% or higher:</b> Aggressive
             </li>
           </ul>
         </div>

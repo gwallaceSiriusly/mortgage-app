@@ -3,158 +3,216 @@ $black: #000;
 $white: #fff;
 $tooltip-hint-dimentions:25px;
 
-.calculator{
-  display: flex;
-  column-gap: 20px;
-  row-gap: 10px;
-}
-
-.inputPanel, .resultPanel {
-  flex-flow: row;
-  align-items: stretch;
-  flex: 1 50%;
-}
-
-.inputPanel{
-  ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    li{
-      position: relative;
+#mortgage-app-root {
+  font-size: 14px;
+  .calculator{
+    display: flex;
+    column-gap: 20px;
+    row-gap: 10px;
+  }
+  
+  .inputPanel, .resultPanel {
+    flex-flow: row;
+    align-items: stretch;
+    flex: 1 50%;
+  }
+  
+  .inputPanel{
+    ul{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      li{
+        position: relative;
+      }
     }
   }
-}
-
-.affordabilityPanel, .affordabilitySlider{
-  display: inline-block;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.error{
-  color: $error;
-  display: inline-block;
-  width: 100%;
-  &.hidden{
-    display: none;
-  }
-}
-
-.heading {
-  display: inline-block;
-  width: 100%;
-}
-
-.inputPanel {
-  input {
+  
+  .affordabilityPanel, .affordabilitySlider{
+    display: inline-block;
     width: 100%;
-    border: 1px solid $black;
-    border-radius: 5px;
-    height: $tooltip-hint-dimentions;
+    flex-wrap: wrap;
   }
-  .tooltip {
-    position: absolute;
-    bottom: 0;
-    left: 100%;
-    max-width: 300px;
-    min-width: 150px;
-    .tooltipText{
-      position: absolute;
-      top: 0;
-      left: 15px;
-      z-index: 99;
+  
+  .error{
+    color: $error;
+    display: inline-block;
+    width: 100%;
+    &.hidden{
       display: none;
-      background-color: $black;
-      color: $white;
+    }
+  }
+  
+  .heading {
+    display: inline-block;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .inputPanel {
+    input {
+      width: 100%!important;
+      border: 1px solid $black;
+      border-radius: 5px;
+      height: $tooltip-hint-dimentions;
+      font-size: 14px;
+    }
+    .tooltip {
+      position: absolute;
+      bottom: 0;
+      left: 100%;
       max-width: 300px;
       min-width: 150px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      box-shadow: #aaa 5px 5px 10px 0px;
-    }
-    &::after {
-      display: none;
-      content: '';
-      background-color: $black;
-      width: 15px;
-      height: 15px;
-      transform: rotate(45deg);
-      position: absolute;
-      left: 8px;
-      top: 6px;
-      box-shadow: #aaa 5px 5px 10px 0px;
-    }
-    &:hover {
-      .tooltipText {
-        display: block;
+      height: $tooltip-hint-dimentions;
+      .tooltipText{
+        position: absolute;
+        top: 0;
+        left: 15px;
+        z-index: 99;
+        display: none;
+        background-color: $black;
+        color: $white;
+        max-width: 300px;
+        min-width: 150px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: #aaa 5px 5px 10px 0px;
       }
       &::after {
-        display: block;
+        display: none;
+        content: '';
+        background-color: $black;
+        width: 15px;
+        height: 15px;
+        transform: rotate(45deg);
+        position: absolute;
+        left: 8px;
+        top: 6px;
+        box-shadow: #aaa 5px 5px 10px 0px;
+      }
+      &:hover {
+        .tooltipText {
+          display: block;
+        }
+        &::after {
+          display: block;
+        }
+      }
+      &::before{
+        content: "";
+        background: transparent url(../public/i.png) no-repeat center;
+        background-color: $black;
+        color: $white;
+        border-radius: 0 5px 5px 0;
+        width: $tooltip-hint-dimentions;
+        height: $tooltip-hint-dimentions;
+        display: inline-block;
+        text-align: center;
+        margin-left: -$tooltip-hint-dimentions;
+        padding: 3px;
+        font-style: italic;
       }
     }
-    &::before{
-      content: "i";
-      background-color: $black;
-      color: $white;
-      border-radius: 0 5px 5px 0;
-      width: $tooltip-hint-dimentions;
-      height: $tooltip-hint-dimentions;
-      display: inline-block;
-      text-align: center;
-      margin-left: -$tooltip-hint-dimentions;
-      padding: 3px;
-      font-style: italic;
-    }
   }
-}
-
-.affordabilityPanel {
-  padding: 50px 20px;
-  background: #f2f2f2 url(../public/house.png);
-  background-repeat: no-repeat;
-  background-position: left center;
-  min-height: 200px;
-  p {
-    text-align: right;
-    &:first-child {
-      font-weight: bold;
-    }
-    .value {
-      min-width: 95px;
-      text-align: left;
-      display: inline-block;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-  }
-}
-
-.affordabilitySlider {
-  margin-top: 20px;
-}
-
-.resultPanel {
-  padding-right: 10px;
-}
-
-.rs-slider-bar {
-  background-image: linear-gradient(90deg, #69c78b 72%, #fff 72% 73%, #faea79 73% 84%, #fff 84% 85%, #ffc3c5 85% 100%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  height: 15px!important;
-}
-
-.rs-slider-handle{
-  top: -50%;
-  &::before {
-    border-color: $white;
-    width: 30px;
-    height: 30px;
-    background: #f8e131 url(../public/dtiLogo.png);
+  
+  .affordabilityPanel {
+    padding: 50px 20px;
+    background: #f2f2f2 url(../public/aff-house.png) no-repeat left center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: center;
-    box-shadow: #aaa 0 0 5px 0;
+    background-position: left center;
+    min-height: 200px;
+    p {
+      text-align: right;
+      &:first-child {
+        font-weight: bold;
+      }
+      .value {
+        min-width: 95px;
+        text-align: left;
+        display: inline-block;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .affordabilitySlider {
+    margin-top: 20px;
+    .custom-slider {
+      margin: 15px 0 40px 0;
+    }
+    h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+    }
+  }
+  
+  .resultPanel {
+    padding-right: 10px;
+  }
+  
+  .rs-slider-bar {
+    background-image: linear-gradient(90deg, #69c78b 50%, #fff 50% 51%, #faea79 52% 79%, #fff 79% 80%, #ffc3c5 80% 100%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    height: 15px!important;
+  }
+  
+  .rs-slider-handle{
+    top: -50%;
+    &::before {
+      border-color: $white;
+      width: 30px;
+      height: 30px;
+      background: #f8e131 url(../public/dtiLogo.png);
+      background-repeat: no-repeat;
+      background-size: 20px;
+      background-position: center;
+      box-shadow: #aaa 0 0 5px 0;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  #mortgage-app-root {
+    .affordabilityPanel {
+      padding: 50px 10px;
+      p {
+        .label, .value {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  #mortgage-app-root {
+    .resultPanel {
+      padding-right: 0;
+      margin-top: 30px;
+    }
+    .calculator {
+      display: inline-block;
+    }
+
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  #mortgage-app-root {
+    .affordabilityPanel {
+      padding: 50px 10px;
+      background-image: none;
+      p {
+        .label, .value {
+          font-size: 12px;
+        }
+      }
+    }
   }
 }
