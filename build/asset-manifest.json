@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/css/main.a3e0f566.css",
-    "main.js": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/main.a8bcccaf.js",
+    "main.css": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/css/main.6f0b1fb4.css",
+    "main.js": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/main.4cfdeb9c.js",
     "static/js/787.284e058b.chunk.js": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/787.284e058b.chunk.js",
     "index.html": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/index.html",
-    "main.a3e0f566.css.map": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/css/main.a3e0f566.css.map",
-    "main.a8bcccaf.js.map": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/main.a8bcccaf.js.map",
+    "main.6f0b1fb4.css.map": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/css/main.6f0b1fb4.css.map",
+    "main.4cfdeb9c.js.map": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/main.4cfdeb9c.js.map",
     "787.284e058b.chunk.js.map": "/indiealley/wp-content/reactpress/apps/mortgage-app/build/static/js/787.284e058b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a3e0f566.css",
-    "static/js/main.a8bcccaf.js"
+    "static/css/main.6f0b1fb4.css",
+    "static/js/main.4cfdeb9c.js"
   ]
 }

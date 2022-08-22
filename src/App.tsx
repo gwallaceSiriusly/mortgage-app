@@ -54,6 +54,17 @@ function App() {
 
     return isValid;
   }
+
+  function toCurrencyString(val :number) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(val); 
+  }
+
+  function toFormattedNumberString(val :number) {
+    return new Intl.NumberFormat().format(val); 
+  }
   
   useEffect(() => {
 
@@ -61,15 +72,6 @@ function App() {
 
     setPayment(Math.round(myPayment * 100)/100);
 
-
-    /*
-
-    This is the reverse engineered formula, it comes out close but a bit different. Keeeping in a comment for now.
-
-    let i = (rate/100)/12;
-    let n = term*12;
-    let x = payment / (( i * (1 + i)**n ) / ( (1 + i)**n - 1));
-    */
     const actualRate = (rate/100)/12;
     const actualTerm = term*12;
 
@@ -88,82 +90,87 @@ function App() {
       <div className="inputPanel">
         <ul>
           <li>
-            <label htmlFor="income" className={"error " + fieldsValidation[0]}>Error message</label>
-            <label htmlFor="income" className="heading">Annual Gross Income </label>
+            <label htmlFor="income" className={"error " + fieldsValidation[0]}>You need to enter a dollar amount.</label>
+            <label htmlFor="income" className="heading">Annual Gross Income ($)</label>
             <input type="tel" name="income" id="income" defaultValue={income} onChange={(ev)=> {
               if (validateIsCurrency(ev.target.value, 0)) {
                 setIncome(Number(ev.target.value));
               }
             }}></input>
-            <label className="tooltip"> <span className="tooltipText">this is the tooltip</span></label>
+            <label className="tooltip"> <span className="tooltipText">Enter the total annual income before taxes for you and your co-borrower.</span></label>
           </li>
           <li>
-            <label htmlFor="term" className={"error " + fieldsValidation[2]}>Error message</label>
-            <label htmlFor="term" className="heading">Loan Duration </label>
+            <label htmlFor="term" className={"error " + fieldsValidation[2]}>You need to enter a whole number of years.</label>
+            <label htmlFor="term" className="heading">Loan Duration (yrs)</label>
             <input type="tel" name="term" id="term" defaultValue={term} onChange={(ev)=> {
               if (validateIsWholeNumber(ev.target.value, 2)) {
                 setTerm(Number(ev.target.value));
               }
             }}></input>
-            <label className="tooltip"> <span className="tooltipText">this is also the tooltip</span></label>
+            <label className="tooltip"> <span className="tooltipText">Select the length of your loan in years.</span></label>
           </li>
           <li>
-            <label htmlFor="pmi" className={"error " + fieldsValidation[6]}>Error message</label>
-            <label htmlFor="pmi" className="heading">Total Car Loan/Student Loan Debt</label>
+            <label htmlFor="pmi" className={"error " + fieldsValidation[6]}>You need to enter a dollar amount.</label>
+            <label htmlFor="pmi" className="heading">Total Car Loan/Student Loan Debt ($)</label>
             <input type="tel" name="pmi" id="pmi" defaultValue={pmi} onChange={(ev)=> {
               if (validateIsCurrency(ev.target.value, 6)) {
                 setPMI(Number(ev.target.value));
               }
             }}></input>
+            <label className="tooltip"> <span className="tooltipText">Enter the total monthly amount of all current car loans or any student loans you pay.</span></label>
           </li>
           <li>
-            <label htmlFor="pi" className={"error " + fieldsValidation[4]}>Error message</label>
-            <label htmlFor="pi" className="heading">Monthly Instalment Debt</label>
+            <label htmlFor="pi" className={"error " + fieldsValidation[4]}>You need to enter a dollar amount.</label>
+            <label htmlFor="pi" className="heading">Monthly Instalment Debt ($)</label>
             <input type="tel" name="pi" id="pi" defaultValue={pi} onChange={(ev)=> {
               if (validateIsCurrency(ev.target.value, 4)) {
                 setPI(Number(ev.target.value));
               }
             }}></input>
+            <label className="tooltip"> <span className="tooltipText">Enter the total amount paid monthly on your credit cards or other installment debts.</span></label>
           </li>
           <li>
-            <label htmlFor="other" className={"error " + fieldsValidation[3]}>Error message</label>
-            <label htmlFor="other" className="heading">Monthly Other Debt</label>
+            <label htmlFor="other" className={"error " + fieldsValidation[3]}>You need to enter a dollar amount.</label>
+            <label htmlFor="other" className="heading">Monthly Other Debt ($)</label>
             <input type="tel" name="other" id="other" defaultValue={other} onChange={(ev)=> {
               if (validateIsCurrency(ev.target.value, 3)) {
                 setOther(Number(ev.target.value));
               }
             }}></input>
+            <label className="tooltip"> <span className="tooltipText">Enter the total amount of additional monthly debts.</span></label>
           </li>
           <li>
-            <label htmlFor="taxes" className={"error " + fieldsValidation[5]}>Error message</label>
-            <label htmlFor="taxes" className="heading">Property Taxes</label>
+            <label htmlFor="taxes" className={"error " + fieldsValidation[5]}>You need to enter a dollar amount.</label>
+            <label htmlFor="taxes" className="heading">Property Taxes ($)</label>
             <input type="tel" name="taxes" id="taxes" defaultValue={taxes} onChange={(ev)=> {
               if (validateIsCurrency(ev.target.value, 5)) {
                 setTaxes(Number(ev.target.value));
               }
             }}></input>
+            <label className="tooltip"> <span className="tooltipText">Enter the total amount of Property Taxes you will pay.</span></label>
           </li>
           <li>
-            <label htmlFor="rate" className={"error " + fieldsValidation[1]}>Error message</label>
-            <label htmlFor="rate" className="heading">Interest rate </label>
+            <label htmlFor="rate" className={"error " + fieldsValidation[1]}>You need to enter a percentage to 2 decimal places.</label>
+            <label htmlFor="rate" className="heading">Interest rate (%)</label>
             <input type="tel" name="rate" id="rate" defaultValue={rate} onChange={(ev)=> {
               if (validateIsPercentage(ev.target.value, 1)) {
                 setRate(Number(ev.target.value));
               }
             }}></input>
+            <label className="tooltip"> <span className="tooltipText">Your interest rate will vary based on a number of factors including home price, down payment, credit score and even location. Estimate your rate based on current market conditions.</span></label>
           </li>
         </ul>
       </div>
       <div className="resultPanel">
         <div className="affordabilityPanel">
           <p>
-            <span className="label">You can afford a home up to: </span><span className="value">${principal}</span>
+            <span className="label">You can afford a home up to: </span><span className="value">{toCurrencyString(principal)}</span>
           </p>
           <p>
-            <span className="label">Your monthly payment: </span><span className="value">${payment}</span>
+            <span className="label">Your monthly payment: </span><span className="value">{toCurrencyString(payment)}</span>
           </p>
           <p>
-            <span className="label">Debt to Income ratio: </span><span className="value">{dti}%</span>
+            <span className="label">Debt to Income ratio: </span><span className="value">{toFormattedNumberString(dti)}%</span>
           </p>
         </div>
         <div className="affordabilitySlider">
