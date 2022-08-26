@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 
 import '../node_modules/rsuite/dist/rsuite.min.css';
 import './App.scss';
-import { pv } from 'financial'
+import { pv, pmt } from 'financial'
 import { Slider } from 'rsuite';
 
 // Usage
@@ -11,19 +11,18 @@ function App() {
   const [principal, setPrincipal] = useState<number>(0);
   const [rate, setRate] = useState<number>(5.75);
   const [term, setTerm] = useState<number>(30);
-  const [other, setOther] = useState<number>(500);
-  const [pi, setPI] = useState<number>(1167.15);
-  const [taxes, setTaxes] = useState<number>(166.67);
-  const [pmi, setPMI] = useState<number>(250.00);
+  const [other, setOther] = useState<number>(0);
+  const [pi, setPI] = useState<number>(0);
+  const [taxes, setTaxes] = useState<number>(0);
+  const [pmi, setPMI] = useState<number>(0);
   const [debts, setDebts] = useState<number>(0);
   const [income, setIncome] = useState<number>(100000);
   const [payment, setPayment] = useState<number>(0);
   const [dti, setDTI] = useState<number>(36);
+  const [downpayment, setDownpayment] = useState<number>(0);
+  const [aq, setAQ] = useState<number>(0.2); // Affordability Quotient 
 
-  const maxAffordability = 0.20;
-  //const maxdti = useState<number>(36);
-
-  const [fieldsValidation, setFieldsValidation] = useState<string[]>(["hidden","hidden","hidden","hidden","hidden","hidden","hidden"]);
+  const [fieldsValidation, setFieldsValidation] = useState<string[]>(["hidden","hidden","hidden","hidden","hidden","hidden","hidden","hidden"]);
 
   function validateIsCurrency(val :string, index :number) {
     const isValid = /(?=.*?\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|\d+)?(\.\d{1,2})?$/.test(val);
@@ -36,7 +35,7 @@ function App() {
   }
   
   function validateIsPercentage(val :string, index :number) {
-    const isValid = /^100$|^100.00$|^\d{0,2}(\.\d{1,2})?$/.test(val);
+    const isValid = /^100$|^100.00$|^\d{0,2}(\.\d{1,3})?$/.test(val);
     setFieldsValidation(fieldsValidation.map((temp,i) => {
       if(i===index) return (isValid?"hidden":"shown");
       else return temp;
@@ -67,23 +66,46 @@ function App() {
   }
   
   useEffect(() => {
+    /*
+      App logic - The user can change the dti manually to see how affordable properties are
+      since we are using debt, income and downpayment to calculate affordability we need a variable 
+      to define how affordabile something is. We do this with our affordability quotient which we 
+      define as DTI/a constant, which we have set to be 120. 
 
-    const myPayment = (income/12)*maxAffordability;
+      The math we produced here is a simplified version of what they are likely going to end up
+      wanting. The client however can't give a clear guidline of what they are going to want, so 
+      an iterative approach will be required.
 
-    setPayment(Math.round(myPayment * 100)/100);
+      Max payment we are calculating as monthly income minus monthly debts multiplied by AQ
+
+      This is used to define the max Principal using financial tools:
+      https://financialjs.netlify.app/
+
+      We use that to work out what the actual payment will be for the loan amount using the same 
+      financial package.
+
+      The DTI is controlled by a slider: 
+      https://rsuitejs.com/components/slider/ 
+    */
+    setAQ(dti/120);
+
+    setDebts(pi+taxes+pmi+other);
+
+    // maximum affordable Principal for the DTI:
+    const myMaxPayment = ((income/12)-debts)*aq;
 
     const actualRate = (rate/100)/12;
     const actualTerm = term*12;
 
-    const myPrincipal = pv(actualRate, actualTerm, -myPayment);
+    const myPrincipal = pv(actualRate, actualTerm, -myMaxPayment);
     
     setPrincipal(Math.round(myPrincipal * 100)/100);
 
-    setDebts(pi+taxes+pmi);
-    const myDTI =  (debts+payment+other)/(income/12);
+    // actual payment for Principal minus the downpayment
+    const actualPayment = pmt(actualRate, actualTerm, -(myPrincipal-downpayment))
 
-    setDTI(Math.round(myDTI*10000)/100);
-  }, [principal, rate, term, payment, debts, income, other, dti, pi, taxes, pmi]);
+    setPayment(Math.round(actualPayment * 100)/100);
+  }, [principal, rate, term, payment, debts, income, other, dti, pi, taxes, pmi, aq, downpayment]);
 
   return (
     <div className="calculator">
@@ -98,6 +120,16 @@ function App() {
               }
             }}></input>
             <label className="tooltip"> <span className="tooltipText">Enter the total annual income before taxes for you and your co-borrower.</span></label>
+          </li>
+          <li>
+            <label htmlFor="dp" className={"error " + fieldsValidation[7]}>You need to enter a whole number of years.</label>
+            <label htmlFor="dp" className="heading">Downpayment</label>
+            <input type="tel" name="term" id="dp" defaultValue={downpayment} onChange={(ev)=> {
+              if (validateIsCurrency(ev.target.value, 7)) {
+                setDownpayment(Number(ev.target.value));
+              }
+            }}></input>
+            <label className="tooltip"> <span className="tooltipText">Select the length of your loan in years.</span></label>
           </li>
           <li>
             <label htmlFor="term" className={"error " + fieldsValidation[2]}>You need to enter a whole number of years.</label>
@@ -150,7 +182,7 @@ function App() {
             <label className="tooltip"> <span className="tooltipText">Enter the total amount of Property Taxes you will pay.</span></label>
           </li>
           <li>
-            <label htmlFor="rate" className={"error " + fieldsValidation[1]}>You need to enter a percentage to 2 decimal places.</label>
+            <label htmlFor="rate" className={"error " + fieldsValidation[1]}>You need to enter a percentage to 3 decimal places.</label>
             <label htmlFor="rate" className="heading">Interest rate (%)</label>
             <input type="tel" name="rate" id="rate" defaultValue={rate} onChange={(ev)=> {
               if (validateIsPercentage(ev.target.value, 1)) {
@@ -175,9 +207,12 @@ function App() {
         </div>
         <div className="affordabilitySlider">
           <Slider
-            min={25}
+            min={10}
             max={50}
             value={dti}
+            onChange={(val:number)=>{
+              setDTI(val);
+            }}
             className="custom-slider"
             handleStyle={{
               borderRadius: 10,
